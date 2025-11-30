@@ -46,7 +46,7 @@ routes.forEach((route) => {
 const xml = urlset.end({ prettyPrint: true });
 
 // Write directly to React build folder for Netlify
-fs.writeFileSync("../public/sitemap.xml", xml);
+fs.writeFileSync("../dist/sitemap.xml", xml);
 
 console.log("✅ Sitemap generated successfully in build folder!");
 console.log(`📍 Generated ${routes.length} URLs`);
