@@ -13,11 +13,15 @@ const routes = [
     "/contact",
 ];
 
+// Function to normalize URLs
 function normalizeUrl(base, route) {
     const cleanBase = base.replace(/\/$/, "");
     const cleanRoute = route.startsWith("/") ? route : "/" + route;
     return (cleanBase + cleanRoute).replace(/([^:]\/)\/+/g, "$1");
 }
+
+// Get today's date in YYYY-MM-DD format
+const today = new Date().toISOString().split("T")[0];
 
 const urlset = create({ version: "1.0" }).ele("urlset", {
     xmlns: "http://www.sitemaps.org/schemas/sitemap/0.9",
@@ -28,8 +32,8 @@ routes.forEach((route) => {
 
     url.ele("loc").txt(normalizeUrl(baseUrl, route));
 
-    // Static lastmod
-    url.ele("lastmod").txt("2025-11-30");
+    // Dynamic lastmod
+    url.ele("lastmod").txt(today);
 
     // Change frequency
     url.ele("changefreq").txt("monthly");
@@ -41,9 +45,10 @@ routes.forEach((route) => {
 
 const xml = urlset.end({ prettyPrint: true });
 
-// Adjust path based on your structure
+// Write directly to React build folder for Netlify
 fs.writeFileSync("../public/sitemap.xml", xml);
 
-console.log("✅ Sitemap generated successfully!");
+console.log("✅ Sitemap generated successfully in build folder!");
 console.log(`📍 Generated ${routes.length} URLs`);
 console.log(`🔗 Base URL: ${baseUrl}`);
+console.log(`📅 Last modified: ${today}`);
